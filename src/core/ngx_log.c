@@ -97,6 +97,7 @@ ngx_log_error_core(ngx_uint_t level, ngx_log_t *log, ngx_err_t err,
 
     last = errstr + NGX_MAX_ERROR_STR;
 
+    // what is ngx_cached_err_log_time ?
     ngx_memcpy(errstr, ngx_cached_err_log_time.data,
                ngx_cached_err_log_time.len);
 
@@ -138,6 +139,7 @@ ngx_log_error_core(ngx_uint_t level, ngx_log_t *log, ngx_err_t err,
         p = last - NGX_LINEFEED_SIZE;
     }
 
+    //增加换行符
     ngx_linefeed(p);
 
     (void) ngx_write_fd(log->file->fd, errstr, p - errstr);
@@ -271,7 +273,7 @@ ngx_log_init(u_char *prefix)
     ngx_log.file = &ngx_log_file;
     ngx_log.log_level = NGX_LOG_NOTICE;
 
-    name = (u_char *) NGX_ERROR_LOG_PATH;  // ����nginx_errlog��path���������ngx_auto_config.h���ж��塰logs/error.log��
+    name = (u_char *) NGX_ERROR_LOG_PATH;  // …Ë÷√nginx_errlogµƒpath£¨’‚∏ˆ∫Í‘⁄ngx_auto_config.h÷–”–∂®“Â°∞logs/error.log°±
 
     /*
      * we use ngx_strlen() here since BCC warns about
@@ -281,7 +283,7 @@ ngx_log_init(u_char *prefix)
     nlen = ngx_strlen(name);
 
     if (nlen == 0) {
-        ngx_log_file.fd = ngx_stderr;  //���û��������־����ļ�����Ĭ�ϲ��ñ�׼���������, ���Ｘ��ֻ����һ��Ԥ���ԵĴ���
+        ngx_log_file.fd = ngx_stderr;  //»Áπ˚√ª”–…Ë÷√»’÷æ ‰≥ˆŒƒº˛£¨æÕƒ¨»œ≤…”√±Í◊º¥ÌŒÛ ‰≥ˆ¡˜, ’‚¿Ôº∏∫ı÷ª «◊ˆ“ª∏ˆ‘§∑¿–‘µƒ¥˙¬Î
         return &ngx_log;
     }
 
@@ -292,7 +294,7 @@ ngx_log_init(u_char *prefix)
 #else
     if (name[0] != '/') {
 #endif
-        // �������ʱ���Ƿ���prefix�������prefix�ͽ�log·��������
+        // ºÏ≤È±‡“Îµƒ ±∫Ú «∑Ò”–prefix£¨»Áπ˚”–prefixæÕΩ´log¬∑æ∂¥Æ∆¿¥
         if (prefix) {
             plen = ngx_strlen(prefix);
 
@@ -304,7 +306,7 @@ ngx_log_init(u_char *prefix)
             plen = 0;
 #endif
         }
-        // ����Ƿ���·��ǰ׺�����оͼӵ�ǰ�棬ʹ�þ���·���ϵ���־�ļ������û�У�ʹ�õ�ǰĿ¼�µ���־�ļ�
+        // ºÏ≤È «∑Ò”–¬∑æ∂«∞◊∫£¨»Á”–æÕº”µΩ«∞√Ê£¨ π”√æ¯∂‘¬∑æ∂…œµƒ»’÷æŒƒº˛£¨»Áπ˚√ª”–£¨ π”√µ±«∞ƒø¬ºœ¬µƒ»’÷æŒƒº˛
         if (plen) {
             name = malloc(plen + nlen + 2);
             if (name == NULL) {
@@ -322,7 +324,7 @@ ngx_log_init(u_char *prefix)
             p = name;
         }
     }
-    // ֻд׷�ӷ�ʽ�򿪣�����������򴴽��� ����Ҳ��windows ��unix �ֿ���
+    // ÷ª–¥◊∑º”∑Ω Ω¥Úø™£¨»Áπ˚≤ª¥Ê‘⁄‘Ú¥¥Ω®£¨ ’‚¿Ô“≤ «windows ∫Õunix ∑÷ø™◊ﬂ
     ngx_log_file.fd = ngx_open_file(name, NGX_FILE_APPEND,
                                     NGX_FILE_CREATE_OR_OPEN,
                                     NGX_FILE_DEFAULT_ACCESS);
